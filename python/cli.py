@@ -4,7 +4,7 @@ import sys
 
 import click
 
-from jobcoin import jobcoin
+# from jobcoin import jobcoin
 
 
 @click.command()
