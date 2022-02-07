@@ -36,7 +36,7 @@ class Mixer:
         self.deposit_addresses_to_wallet[new_address] = Wallet(deposit_addresses, new_address)
         return new_address
     
-    def execute_transaction(self, transaction: Transaction, minted: bool = False):
+    def execute_transaction(self, transaction: Transaction, is_minted: bool = False):
         sender_address: str = transaction.get_from_address()
         receiver_address: str = transaction.get_to_address()
         amount: float = float(transaction.get_amount())
@@ -45,20 +45,20 @@ class Mixer:
         amount_after_fee = amount - fee
         print("Amount after fee {}".format(amount_after_fee))
 
-        self._transfer_amount(sender_address, self._house_address, amount_after_fee, minted)
+        self._transfer_amount(sender_address, self._house_address, amount_after_fee, is_minted)
         self._transfer_discrete(receiver_address, amount_after_fee)
 
         # We also charge the fee for minted transactions
         self.fees_collected += amount * fee
         self.transaction_queue.append(transaction)
 
-        if not minted:
+        if not is_minted:
             self.deposit_addresses_to_wallet[sender_address].add_transaction(transaction)
 
         self.deposit_addresses_to_wallet[receiver_address].add_transaction(transaction)
 
-    def _transfer_amount(self, sender: str, receiver: str, amt: float, minted: bool):
-        if not minted:
+    def _transfer_amount(self, sender: str, receiver: str, amt: float, is_minted: bool):
+        if not is_minted:
             if sender == self._house_address:
                 self.house_balance -= amt
             else:
@@ -76,11 +76,12 @@ class Mixer:
     def _get_n_random_proportions(self, n):
         random_props = np.random.random(n-1)
         random_props = (random_props/random_props.sum()).round(2)
-        np.append(random_props, 1.0 - random_props.sum())
+        random_props = np.append(random_props, 1.0 - random_props.sum())
         return random_props
     
     def _transfer_discrete(self, receiver: str, amt: float):
         num_addresses_receiver = self.deposit_addresses_to_wallet[receiver].get_num_addresses()
+        print("Num addresses receiver", num_addresses_receiver)
         n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
         print(n_random_proportions)
         print(n_random_proportions.sum())

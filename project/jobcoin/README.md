@@ -10,9 +10,12 @@
 9. Add 'info' logging
 10. [DONE] Every class into its own file
 11. Update README
+12. Support cmd-c, cmd-d breaks
 
 
 ## Learnings
 Absolute imports are good
 Directory structure in python is important
 Generating random floats is not trivial, requires thought
+
+Run using python -m project.cli

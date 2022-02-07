@@ -19,23 +19,21 @@ class JobcoinNetwork:
         return self.mixer.get_deposit_address(addresses)
 
     def send(self, sender: str, receiver: str, amount: str):
-        if sender != "None" and self.mixer.get_balance(sender) < float(amount):
+        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < float(amount):
             raise InsufficientBalanceException()
         
-        if sender == "None":
-            transaction = self.mint_coins(receiver, amount)
-        else:
-            transaction = Transaction(sender, receiver, amount)
-
-        is_minted = sender=="None"
+        if sender == JobcoinNetwork.MINTED:
+            self.mint_coins(amount)
+            
+        transaction = Transaction(sender, receiver, amount)
+        is_minted = sender == JobcoinNetwork.MINTED
         self.mixer.execute_transaction(transaction, is_minted)
 
     def get_transactions(self, address=None):
         return self.mixer.get_transactions(address)
 
-    def mint_coins(self, minter: str, amount: str):
+    def mint_coins(self, amount: str):
         self.network_minted_coins += float(amount)
-        return Transaction(JobcoinNetwork.MINTED, minter, amount)
 
     def get_num_coins_minted(self):
         return self.network_minted_coins
