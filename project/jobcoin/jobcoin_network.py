@@ -23,7 +23,7 @@ class JobcoinNetwork:
             raise DepositAddressDoesntExistException(sender)
         if not self.mixer.contains_key(receiver):
             raise DepositAddressDoesntExistException(receiver)
-        if self.mixer.get_balance(sender) < float(amount):
+        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < float(amount):
             raise InsufficientBalanceException()
         
         if sender == JobcoinNetwork.MINTED:

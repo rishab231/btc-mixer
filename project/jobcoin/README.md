@@ -6,14 +6,15 @@
 5. Add exceptions for Insufficient balance, malformed JSON
 6. [DONE] Get list of global transactions
 7. Add doc strings to functions -- look at Prob140
-8. Fix is_minted logic -- right now it's sender == None
+8. [DONE] Fix is_minted logic -- right now it's sender == None
 9. Add 'info' logging
 10. [DONE] Every class into its own file
 11. Update README
 12. Support cmd-c, cmd-d breaks
 13. Construct requirements.py
 14. Add more CLI tests
-
+15. Amount float vs int
+16. Address todos in code
 
 ## Learnings
 Absolute imports are good

@@ -86,6 +86,7 @@ class Mixer:
         print(n_random_proportions)
         print(n_random_proportions.sum())
 
+        # Todo: Update this to sleep for more time
         random_sleep_times = np.random.randint(low=0, high=1, size=num_addresses_receiver-1)
         self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
 

@@ -2,14 +2,14 @@
 import pytest
 import re
 from project.jobcoin.jobcoin_network import JobcoinNetwork
-from project.jobcoin.exceptions import InsufficientBalanceException
+from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
 
 @pytest.fixture
 def before_all():
     network = JobcoinNetwork()
     deposit_1 = network.add_addresses(["1234", "5678"])
     amount = '100.0'
-    network.send("None", deposit_1, amount)
+    network.send(JobcoinNetwork.MINTED, deposit_1, amount)
     return network, deposit_1, amount
 
 def test_address_created(before_all):
@@ -51,3 +51,16 @@ def test_insufficient_balance(before_all):
 
     with pytest.raises(InsufficientBalanceException):
         network.send(deposit_1, deposit_2, amount_2)
+
+def test_sender_address_no_exists():
+    network = JobcoinNetwork()
+    sender_address = "abc"
+    receiver_address = "def"
+    with pytest.raises(DepositAddressDoesntExistException):
+        network.send(sender_address, receiver_address, '200.0')
+
+def test_receiver_address_no_exists(before_all):
+    network, sender_address, amount = before_all
+    receiver_address = "def"
+    with pytest.raises(DepositAddressDoesntExistException):
+        network.send(sender_address, receiver_address, '200.0')
