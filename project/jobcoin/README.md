@@ -11,6 +11,8 @@
 10. [DONE] Every class into its own file
 11. Update README
 12. Support cmd-c, cmd-d breaks
+13. Construct requirements.py
+14. Add more CLI tests
 
 
 ## Learnings

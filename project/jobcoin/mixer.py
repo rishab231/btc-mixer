@@ -87,16 +87,19 @@ class Mixer:
         print(n_random_proportions.sum())
 
         random_sleep_times = np.random.randint(low=0, high=1, size=num_addresses_receiver-1)
-        self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, minted=False)
+        self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
             time.sleep(random_sleep_times[i-1])
-            self._transfer_amount(self._house_address, receiver, n_random_proportions[i] * amt, minted=False)
+            self._transfer_amount(self._house_address, receiver, n_random_proportions[i] * amt, is_minted=False)
         
         return 1
 
-    def get_transactions(self, address):
-        if address is None:
+    def contains_key(self, address: str):
+        return address in self.deposit_addresses_to_wallet
+
+    def get_transactions(self, address: str):
+        if address == None:
             return str([xact.return_transaction() for xact in self.transaction_queue])
 
         elif address not in self.deposit_addresses_to_wallet:

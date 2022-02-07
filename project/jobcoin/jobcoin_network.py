@@ -2,7 +2,7 @@ from project.jobcoin.transaction import Transaction
 from . import config
 from typing import List
 from project.jobcoin.mixer import Mixer
-from project.jobcoin.exceptions import InsufficientBalanceException
+from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
 
 class JobcoinNetwork:
     """
@@ -19,7 +19,11 @@ class JobcoinNetwork:
         return self.mixer.get_deposit_address(addresses)
 
     def send(self, sender: str, receiver: str, amount: str):
-        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < float(amount):
+        if sender != JobcoinNetwork.MINTED and not self.mixer.contains_key(sender):
+            raise DepositAddressDoesntExistException(sender)
+        if not self.mixer.contains_key(receiver):
+            raise DepositAddressDoesntExistException(receiver)
+        if self.mixer.get_balance(sender) < float(amount):
             raise InsufficientBalanceException()
         
         if sender == JobcoinNetwork.MINTED:

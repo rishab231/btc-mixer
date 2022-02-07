@@ -2,7 +2,7 @@
 import sys
 
 import click
-from project.jobcoin.exceptions import InsufficientBalanceException
+from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
 from project.jobcoin.jobcoin_network import JobcoinNetwork
 
 
@@ -46,6 +46,7 @@ def main(args=None):
             elif "send" in input_:
                 command, args = input_.split(' ', 1)
                 transaction_metadata = args.split(' ')
+                print(transaction_metadata)
                 if len(transaction_metadata)==2:
                     sender, receiver, amount = JobcoinNetwork.MINTED, transaction_metadata[0], transaction_metadata[1]
                 elif len(transaction_metadata)==3:
@@ -78,6 +79,9 @@ def main(args=None):
             click.echo('\nCommand not found! Type help for usage.\n')
         
         except InsufficientBalanceException as e:
+            click.echo('\n{}\n'.format(e))
+        
+        except DepositAddressDoesntExistException as e:
             click.echo('\n{}\n'.format(e))
 
 if __name__ == '__main__':
