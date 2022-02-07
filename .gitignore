@@ -1,1 +1,7 @@
+project/__pycache__
+*.py[cod]
+*$py.class
+.pytest_cache/
+.DS_Store
+project/.DS_Store
 .vscode/

@@ -1,6 +1,0 @@
-[
-  "project/tests/test_jobcoin_cli.py::test_content",
-  "project/tests/test_jobcoin_cli.py::test_cli_basic",
-  "project/tests/test_jobcoin_cli.py::test_cli_creates_address",
-  "project/tests/test_jobcoin_cli.py::test_cli_deposit_amount"
-]
