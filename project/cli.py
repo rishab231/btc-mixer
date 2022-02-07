@@ -3,8 +3,7 @@ import uuid
 import sys
 
 import click
-
-from jobcoin import jobcoin
+from project.jobcoin.jobcoin_network import JobcoinNetwork
 
 
 @click.command()
@@ -21,7 +20,7 @@ def main(args=None):
         f) blank (enter)                                        Exit from this CLI tool
     """
 
-    network = jobcoin.JobcoinNetwork()
+    network = JobcoinNetwork()
 
     while True:
         input_ = click.prompt(

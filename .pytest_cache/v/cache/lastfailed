@@ -1,4 +1,3 @@
 {
-  "project/tests/test_jobcoin_cli.py": true,
   "python/tests/test_jobcoin.py": true
 }
