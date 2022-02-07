@@ -1,1 +1,5 @@
-[]
+[
+  "project/tests/test_jobcoin.py::test_address_created",
+  "project/tests/test_jobcoin.py::test_minting",
+  "project/tests/test_jobcoin.py::test_simple_send"
+]

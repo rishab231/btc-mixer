@@ -45,7 +45,7 @@ def main(args=None):
         elif "send" in input_:
             command, args = input_.split(' ', 1)
             sender, receiver, amount = args.split(' ')
-            network.evaluate_transaction(sender, receiver, amount)
+            network.send(sender, receiver, amount)
             click.echo(
             '\n{amount} sent from {sender} to {receiver} via JobcoinMixer.\n'
               .format(amount=amount, sender=sender, receiver=receiver))

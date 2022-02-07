@@ -1,4 +1,6 @@
 {
+  "project/tests/test_jobcoin.py::test_minting": true,
+  "project/tests/test_jobcoin.py::test_simple_send": true,
   "project/tests/test_jobcoin_cli.py": true,
   "python/tests/test_jobcoin.py": true
 }

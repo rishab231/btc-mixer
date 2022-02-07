@@ -6,6 +6,8 @@
 5. Add exceptions for Insufficient balance, malformed JSON
 6. Get list of global transactions
 7. Add doc strings to functions
+8. Fix is_minted logic -- right now it's sender == None
+9. Add 'info' logging
 
 
 ## Learnings
