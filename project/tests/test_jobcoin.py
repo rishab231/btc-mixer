@@ -4,8 +4,8 @@ import re
 from click.testing import CliRunner
 import requests
 
-from ..jobcoin import config
-from .. import cli
+from project.jobcoin import config
+from project import cli
 
 
 @pytest.fixture
