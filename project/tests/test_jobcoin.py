@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import pytest
 import re
-from project.jobcoin import jobcoin
+from project.jobcoin.jobcoin_network import JobcoinNetwork
+from project.jobcoin.exceptions import InsufficientBalanceException
 
 @pytest.fixture
 def before_all():
-    network = jobcoin.JobcoinNetwork()
+    network = JobcoinNetwork()
     deposit_1 = network.add_addresses(["1234", "5678"])
     amount = '100.0'
     network.send("None", deposit_1, amount)
@@ -22,7 +23,7 @@ def test_address_created(before_all):
 def test_minting(before_all):
     network, deposit_1, amount = before_all
     my_transactions = network.get_transactions(deposit_1)
-    assert "'fromAddress': '{}'".format(jobcoin.JobcoinNetwork.MINTED) in my_transactions
+    assert "'fromAddress': '{}'".format(JobcoinNetwork.MINTED) in my_transactions
     assert "'toAddress': '{}'".format(deposit_1) in my_transactions
     assert "'amount': '{}'".format(amount) in my_transactions
     assert network.get_num_coins_minted() == float(amount)
@@ -48,5 +49,5 @@ def test_insufficient_balance(before_all):
     deposit_2 = network.add_addresses(["1001", "2002"])
     amount_2 = "200.0"
 
-    with pytest.raises(jobcoin.InsufficientBalanceException):
+    with pytest.raises(InsufficientBalanceException):
         network.send(deposit_1, deposit_2, amount_2)
