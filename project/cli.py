@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import uuid
 import sys
 
 import click

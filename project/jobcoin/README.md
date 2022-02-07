@@ -4,12 +4,15 @@
 3. Create JobCoin network that listens in on transactions
 4. Futures block for async execution of discrete transactions
 5. Add exceptions for Insufficient balance, malformed JSON
-6. Get list of global transactions
-7. Add doc strings to functions
+6. [DONE] Get list of global transactions
+7. Add doc strings to functions -- look at Prob140
 8. Fix is_minted logic -- right now it's sender == None
 9. Add 'info' logging
-10. Every class into its own file
+10. [DONE] Every class into its own file
+11. Update README
 
 
 ## Learnings
 Absolute imports are good
+Directory structure in python is important
+Generating random floats is not trivial, requires thought
