@@ -32,3 +32,7 @@ def test_cli_creates_address():
         'They will be mixed and sent to your destination addresses.'
     )
     assert output_re.search(address_create_output) is not None
+
+def test_cli_deposit_amount():
+    runner = CliRunner()
+    deposit_amount = runner.invoke(cli.main, input='1234,4321').output
