@@ -23,16 +23,19 @@ def main():
 
     network = jobcoin.JobcoinNetwork()
 
-    while True:
-        click.prompt(
-            'Please enter your command',
-            prompt_suffix='\n[blank to quit] > ',
-            default='',
-            show_default=False)
+    #while True:
+        # click.prompt(
+        #     'Please enter your command',
+        #     prompt_suffix='\n[blank to quit] > ',
+        #     default='',
+        #     show_default=False)
             
-        prompt_runner()
+    rv = prompt_runner(standalone_mode=False)
 
+
+#@click.group(invoke_without_command=True)
 @click.command()
+@click.pass_context
 @click.option('--add_address', help='number of greetings')
 @click.option('--send', help='send')
 @click.option('--get_transactions', default='', help='Get all transactions associated with address in the JobcoinMixer')
@@ -53,9 +56,9 @@ def prompt_runner(add_address, send, get_transactions, help):
         click.echo("Get transactions args are {}".format(get_transactions))
         is_blank = False
     
-    if is_blank:
-        sys.exit(0)
+    # if is_blank:
+    #     sys.exit(0)
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()

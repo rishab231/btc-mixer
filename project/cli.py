@@ -8,11 +8,6 @@ from jobcoin import jobcoin
 
 
 @click.command()
-@click.option('--add-address', help='number of greetings')
-@click.option('--send', help='number of greetings')
-@click.option('--get_transactions', default='', help='Get all transactions associated with address in the JobcoinMixer')
-@click.option('--help', help='See help docstring')
-@click.option('--blank', help='Exit from CLI tool')
 def main(args=None):
     print('Welcome to the Jobcoin mixer!\n')
 
@@ -38,22 +33,32 @@ def main(args=None):
         if input_.strip() == '':
             sys.exit(0)
 
-        command, args = input_.split(' ', 1)
-        if command == "add_address":
-            args = args.replace(' ', '')
-            addresses = args[1].split(",")
+        if "add_address" in input_:
+            command, args = input_.split(' ', 1)
+            addresses = args.replace(' ', '')[1].split(",")
             deposit_address = network.add_addresses(addresses)
             click.echo(
             '\nYou may now send Jobcoins to address {deposit_address}. They '
             'will be mixed and sent to your destination addresses.\n'
               .format(deposit_address=deposit_address))
         
+        elif "send" in input_:
+            command, args = input_.split(' ', 1)
+            sender, receiver, amount = args.split(' ')
+            network.evaluate_transaction(sender, receiver, amount)
+            click.echo(
+            '\n{amount} sent from {sender} to {receiver} via JobcoinMixer.\n'
+              .format(amount=amount, sender=sender, receiver=receiver))
+        
+        elif "get_transactions" in input_:
+            output = input_.split(' ')
+            if len(output) == 1:
+                click.echo(network.get_transactions())
+            else:
+                click.echo(network.get_transactions(output[2]))
+
         else:
             click.echo(help_string)
-
-# @click.command()
-# @click.option('--n', default=1)
-# def prompt_runner(command, arguments):
 
 
 if __name__ == '__main__':
