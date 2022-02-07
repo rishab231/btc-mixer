@@ -1,3 +1,4 @@
+from random import random
 from . import config
 import logging
 from datetime import datetime, timezone
@@ -84,6 +85,7 @@ class Wallet:
         return self.balance
     
     def increase_balance(self, amount: float):
+        print("Increase balance by {}".format(amount))
         self.balance += amount
 
     def decrease_balance(self, amount: float):
@@ -112,8 +114,8 @@ class Mixer:
     
     def get_balance(self, address):
         if address not in self.deposit_addresses_to_wallet:
-            print("This happened!")
             return 0
+        print("Balance is", self.deposit_addresses_to_wallet[address].get_balance())
         return self.deposit_addresses_to_wallet[address].get_balance()
     
     def get_deposit_address(self, deposit_addresses: List[str]) -> str:
@@ -132,6 +134,7 @@ class Mixer:
 
         fee = amount * self.fee_percentage
         amount_after_fee = amount - fee
+        print("Amount after fee {}".format(amount_after_fee))
 
         self._transfer_amount(sender_address, self._house_address, amount_after_fee, minted)
         self._transfer_discrete(receiver_address, amount_after_fee)
@@ -159,18 +162,25 @@ class Mixer:
             receiver_wallet.increase_balance(amt)
 
         return 1
+
+    def _get_n_random_proportions(self, n):
+        random_props = np.random.random(n-1)
+        random_props = (random_props/random_props.sum()).round(2)
+        np.append(random_props, 1.0 - random_props.sum())
+        return random_props
     
     def _transfer_discrete(self, receiver: str, amt: float):
         num_addresses_receiver = self.deposit_addresses_to_wallet[receiver].get_num_addresses()
-        random_amounts = np.random.random(num_addresses_receiver)
-        random_amounts /= random_amounts.sum()
+        n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
+        print(n_random_proportions)
+        print(n_random_proportions.sum())
 
         random_sleep_times = np.random.randint(low=0, high=1, size=num_addresses_receiver-1)
-        self._transfer_amount(self._house_address, receiver, random_amounts[0], minted=False)
+        self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, minted=False)
 
-        for i in range(1, len(random_amounts)):
+        for i in range(1, len(n_random_proportions)):
             time.sleep(random_sleep_times[i-1])
-            self._transfer_amount(self._house_address, receiver, random_amounts[i], minted=False)
+            self._transfer_amount(self._house_address, receiver, n_random_proportions[i] * amt, minted=False)
         
         return 1
 

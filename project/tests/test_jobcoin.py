@@ -20,20 +20,21 @@ def test_minting():
     #deposit_2 = network.add_addresses(["1001", "2002"])
     network.send("None", deposit_1, amount)
     my_transactions = network.get_transactions(deposit_1)
-    assert "'fromAddress': '(new)'" in all_transactions
-    assert "'toAddress': '{}'".format(deposit_1) in all_transactions
-    assert "'amount': '{}'".format(amount) in all_transactions
+    assert "'fromAddress': '(new)'" in my_transactions
+    assert "'toAddress': '{}'".format(deposit_1) in my_transactions
+    assert "'amount': '{}'".format(amount) in my_transactions
 
 def test_simple_send():
     network = jobcoin.JobcoinNetwork()
     deposit_1 = network.add_addresses(["1234", "5678"])
     deposit_2 = network.add_addresses(["1001", "2002"])
-    amount = '200.0'
+    amount_1 = '200.0'
+    amount_2 = "150"
 
-    network.send("None", deposit_1, amount)
-    network.send(deposit_1, deposit_2, amount)
-    
-    all_transactions = network.get_transactions()
+    network.send("None", deposit_1, amount_1)
+    network.send(deposit_1, deposit_2, amount_2)
+
+    all_transactions = network.get_transactions(deposit_2)
     assert "'fromAddress': '{}'".format(deposit_1) in all_transactions
     assert "'toAddress': '{}'".format(deposit_2) in all_transactions
-    assert "'amount': '{}'".format(amount) in all_transactions
+    assert "'amount': '{}'".format(amount_2) in all_transactions
