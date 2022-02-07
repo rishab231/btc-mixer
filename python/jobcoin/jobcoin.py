@@ -10,7 +10,7 @@ from typing import List
 class JobCoin:
     """
     Polls the network to check for transactions for any deposit address (tied to an address) on the JobCoinNetwork.
-    Throws an exception if address not found.
+    Throws an exception for insufficient balance (or an address is not found).
     """    
     def __init___(self):
         self.mixer = Mixer()

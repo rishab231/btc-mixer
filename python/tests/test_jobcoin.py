@@ -2,6 +2,7 @@
 import pytest
 import re
 from click.testing import CliRunner
+import requests
 
 from ..jobcoin import config
 from .. import cli
@@ -34,5 +35,10 @@ def test_cli_creates_address():
     assert output_re.search(address_create_output) is not None
 
 def test_cli_deposit_amount():
-    runner = CliRunner()
-    deposit_amount = runner.invoke(cli.main, input='1234,4321').output
+    r = requests.get("https://jobcoin.gemini.com/iodine-defrost/addresses/Alice")
+    print(r.url)
+    print(r.content)
+    print(r.text)
+    print(r.encoding)
+    x = 4
+    assert x == 4
