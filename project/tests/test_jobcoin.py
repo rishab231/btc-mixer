@@ -22,9 +22,10 @@ def test_address_created(before_all):
 def test_minting(before_all):
     network, deposit_1, amount = before_all
     my_transactions = network.get_transactions(deposit_1)
-    assert "'fromAddress': '(new)'" in my_transactions
+    assert "'fromAddress': '{}'".format(jobcoin.JobcoinNetwork.MINTED) in my_transactions
     assert "'toAddress': '{}'".format(deposit_1) in my_transactions
     assert "'amount': '{}'".format(amount) in my_transactions
+    assert network.get_num_coins_minted() == float(amount)
 
 def test_simple_send(before_all):
     network, deposit_1, amount_1 = before_all
@@ -36,6 +37,10 @@ def test_simple_send(before_all):
     assert "'fromAddress': '{}'".format(deposit_1) in account_2_transactions
     assert "'toAddress': '{}'".format(deposit_2) in account_2_transactions
     assert "'amount': '{}'".format(amount_2) in account_2_transactions
+
+    print("Amount 1 is {}".format(amount_1))
+    assert network.mixer.get_balance(deposit_1) == pytest.approx((float(amount_1) - float(amount_2)) * (1-0.02))
+    assert network.mixer.get_balance(deposit_2) == pytest.approx((float(amount_2)) * (1-0.02))
 
 def test_insufficient_balance(before_all):
     network, deposit_1, amount_1 = before_all

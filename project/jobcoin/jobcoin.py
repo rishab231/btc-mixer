@@ -47,6 +47,9 @@ class JobcoinNetwork:
         self.network_minted_coins += float(amount)
         return Transaction(JobcoinNetwork.MINTED, minter, amount)
 
+    def get_num_coins_minted(self):
+        return self.network_minted_coins
+
 
 
 class Transaction:
@@ -132,7 +135,7 @@ class Mixer:
         self.deposit_addresses_to_wallet[new_address] = Wallet(deposit_addresses, new_address)
         return new_address
     
-    def execute_transaction(self, transaction: Transaction, minted: bool =False):
+    def execute_transaction(self, transaction: Transaction, minted: bool = False):
         sender_address: str = transaction.get_from_address()
         receiver_address: str = transaction.get_to_address()
         amount: float = float(transaction.get_amount())
@@ -150,6 +153,7 @@ class Mixer:
 
         if not minted:
             self.deposit_addresses_to_wallet[sender_address].add_transaction(transaction)
+
         self.deposit_addresses_to_wallet[receiver_address].add_transaction(transaction)
 
     def _transfer_amount(self, sender: str, receiver: str, amt: float, minted: bool):
