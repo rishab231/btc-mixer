@@ -8,6 +8,7 @@
 7. Add doc strings to functions
 8. Fix is_minted logic -- right now it's sender == None
 9. Add 'info' logging
+10. Every class into its own file
 
 
 ## Learnings

@@ -8,6 +8,11 @@ import time
 from typing import List
 import uuid
 
+class InsufficientBalanceException(Exception):
+    def __init__(self):
+        message = "Insufficient balance in sender's account"
+        super().__init__(message)
+
 # Write your Jobcoin API client here.
 class JobcoinNetwork:
     """
@@ -25,7 +30,7 @@ class JobcoinNetwork:
 
     def send(self, sender: str, receiver: str, amount: str):
         if sender != "None" and self.mixer.get_balance(sender) < float(amount):
-            raise Exception("Insufficient Balance!")
+            raise InsufficientBalanceException()
         
         if sender == "None":
             transaction = self.mint_coins(receiver, amount)
@@ -104,7 +109,7 @@ class Mixer:
     - [DONE] Transfers your bitcoins from the deposit address to the house account
     - [DONE] Over time, these bitcoins are transferred in discrete investments to the withdrawal addresses provided, after capturing a 2% fee.
     """
-    def __init__(self, fee_percentage: float = 0.00):
+    def __init__(self, fee_percentage: float = 0.02):
         self.deposit_addresses_to_wallet = dict()
         self._house_address = uuid.uuid4().hex
         self.fee_percentage = fee_percentage
