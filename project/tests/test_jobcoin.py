@@ -36,9 +36,9 @@ def test_cli_creates_address():
 
 def test_cli_deposit_amount():
     r = requests.get("https://jobcoin.gemini.com/iodine-defrost/addresses/Alice")
-    print(r.url)
-    print(r.content)
-    print(r.text)
-    print(r.encoding)
+    # print(r.url)
+    # print(r.content)
+    # print(r.text)
+    # print(r.encoding)
     x = 4
     assert x == 4

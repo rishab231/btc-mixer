@@ -5,15 +5,19 @@ import time
 import numpy as np
 import time
 from typing import List
+import uuid
 
 # Write your Jobcoin API client here.
-class JobCoin:
+class JobcoinNetwork:
     """
     Polls the network to check for transactions for any deposit address (tied to an address) on the JobCoinNetwork.
     Throws an exception for insufficient balance (or an address is not found).
-    """    
-    def __init___(self):
+    """
+    def __init__(self):
         self.mixer = Mixer()
+
+    def add_addresses(self, addresses: List[str]):
+        return self.mixer.get_deposit_address(addresses)
 
 
 class Transaction:
@@ -86,10 +90,10 @@ class Mixer:
     """
     - [DONE] Provides a new deposit address that it owns.
     - [DONE] Transfers your bitcoins from the deposit address to the house account
-    - Over time, these bitcoins are transferred in discrete investments to the withdrawal addresses provided, after capturing a 2% fee.
+    - [DONE] Over time, these bitcoins are transferred in discrete investments to the withdrawal addresses provided, after capturing a 2% fee.
     """
     def __init__(self, fee_percentage: float = 0.02):
-        self.deposit_addresses_to_wallet = dict(Wallet)
+        self.deposit_addresses_to_wallet = dict()
         self._house_address = uuid.uuid4().hex
         self.fee_percentage = fee_percentage
         self.house_balance = 0.0
@@ -98,7 +102,7 @@ class Mixer:
     def get_deposit_address(self, deposit_addresses: List[str]) -> str:
         new_address = uuid.uuid4().hex
 
-        while new_address not in self.deposit_addresses_to_wallet:
+        while new_address in self.deposit_addresses_to_wallet:
             new_address = uuid.uuid4().hex
         
         self.deposit_addresses_to_wallet[new_address] = Wallet(deposit_addresses, new_address)

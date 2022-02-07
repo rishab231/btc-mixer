@@ -5,3 +5,8 @@
 4. Futures block for async execution of discrete transactions
 5. Add exceptions for Insufficient balance, malformed JSON
 6. Get list of global transactions
+7. Add doc strings to functions
+
+
+## Learnings
+Absolute imports are good
