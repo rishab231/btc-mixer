@@ -3,22 +3,27 @@
 2. Add unit tests for jobcoin.py main functions
 3. Create JobCoin network that listens in on transactions
 4. Futures block for async execution of discrete transactions
-5. Add exceptions for Insufficient balance, malformed JSON
+5. [DONE] Add exceptions for Insufficient balance, malformed JSON
 6. [DONE] Get list of global transactions
 7. Add doc strings to functions -- look at Prob140
 8. [DONE] Fix is_minted logic -- right now it's sender == None
 9. Add 'info' logging
 10. [DONE] Every class into its own file
 11. Update README
-12. Support cmd-c, cmd-d breaks
+12. [DONE] Support cmd-c, cmd-d breaks for cli
 13. Construct requirements.py
 14. Add more CLI tests
 15. Amount float vs int
 16. Address todos in code
+17. Typing for return values of functions
+18. Time.sleep can be float?
+19. Create architecture diagram of application
 
 ## Learnings
 Absolute imports are good
 Directory structure in python is important
 Generating random floats is not trivial, requires thought
+Futures block for async execution of discrete transactions
+Create JobCoin network that listens in on transactions
 
 Run using python -m project.cli

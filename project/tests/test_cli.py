@@ -27,7 +27,7 @@ def test_cli_basic():
 
 def test_cli_creates_address():
     runner = CliRunner()
-    address_create_output = runner.invoke(cli.main, input='add_address 1234,4321').output
+    address_create_output = runner.invoke(cli.main, input='add_address 0x4g7z,0x8a54').output
     output_re = re.compile(
         r'You may now send Jobcoins to address [0-9a-zA-Z]{32}. '
         'They will be mixed and sent to your destination addresses.'

@@ -45,17 +45,18 @@ class Mixer:
         amount_after_fee = amount - fee
         print("Amount after fee {}".format(amount_after_fee))
 
-        self._transfer_amount(sender_address, self._house_address, amount_after_fee, is_minted)
-        self._transfer_discrete(receiver_address, amount_after_fee)
-
         # We also charge the fee for minted transactions
-        self.fees_collected += amount * fee
+        self._transfer_amount(sender_address, self._house_address, amount, is_minted)
+        self._transfer_discrete(receiver_address, amount_after_fee)
+        
         self.transaction_queue.append(transaction)
 
         if not is_minted:
             self.deposit_addresses_to_wallet[sender_address].add_transaction(transaction)
 
         self.deposit_addresses_to_wallet[receiver_address].add_transaction(transaction)
+        self.fees_collected += fee
+        self.house_balance -= fee
 
     def _transfer_amount(self, sender: str, receiver: str, amt: float, is_minted: bool):
         if not is_minted:
@@ -104,7 +105,10 @@ class Mixer:
             return str([xact.return_transaction() for xact in self.transaction_queue])
 
         elif address not in self.deposit_addresses_to_wallet:
-            return []
+            return str([])
         
         else:
             return self.deposit_addresses_to_wallet[address].get_transaction_history()
+
+    def get_fees_collected(self):
+        return self.fees_collected
