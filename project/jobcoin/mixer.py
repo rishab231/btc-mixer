@@ -136,10 +136,7 @@ class Mixer:
             amt (float): Amount to be transferred.
         """        
         num_addresses_receiver = self.deposit_addresses_to_wallet[receiver].get_num_addresses()
-        print("Num addresses receiver", num_addresses_receiver)
         n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
-        print(n_random_proportions)
-        print(n_random_proportions.sum())
 
         # Todo: Update this to sleep for more time
         random_sleep_times = np.random.randint(low=0, high=1, size=num_addresses_receiver-1)

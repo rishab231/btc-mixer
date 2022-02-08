@@ -35,11 +35,11 @@ def test_simple_send(before_all):
     amount_2 = "90.0"
     network.send(deposit_1, deposit_2, amount_2)
     account_2_transactions = network.get_transactions(deposit_2)
-    assert "'fromAddress': '{}'".format(deposit_2) in account_2_transactions
+
+    assert "'fromAddress': '{}'".format(deposit_1) in account_2_transactions
     assert "'toAddress': '{}'".format(deposit_2) in account_2_transactions
     assert "'amount': '{}'".format(amount_2) in account_2_transactions
 
-    print("Amount 1 is {}".format(amount_1))
     assert network.mixer.get_balance(deposit_1) == pytest.approx((float(amount_1) * (1 - 0.02) - float(amount_2)))
     assert network.mixer.get_balance(deposit_2) == pytest.approx((float(amount_2)) * (1-0.02))
 
@@ -73,7 +73,6 @@ def test_balance(before_all):
     deposit_3 = network.add_addresses(["0x7j4f", "0x20a"])
     amount_3 = "30.0"
     network.send(deposit_1, deposit_3, amount_3)
-    print(network.get_transactions(deposit_1))
     assert "balance: 18" in network.get_transactions(deposit_1)
     assert "balance: 49" in network.get_transactions(deposit_2)
     assert "balance: 29.4" in network.get_transactions(deposit_3)
