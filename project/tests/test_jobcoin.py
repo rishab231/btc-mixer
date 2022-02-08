@@ -35,7 +35,7 @@ def test_simple_send(before_all):
     amount_2 = "90.0"
     network.send(deposit_1, deposit_2, amount_2)
     account_2_transactions = network.get_transactions(deposit_2)
-    assert "'fromAddress': '{}'".format(deposit_1) in account_2_transactions
+    assert "'fromAddress': '{}'".format(deposit_2) in account_2_transactions
     assert "'toAddress': '{}'".format(deposit_2) in account_2_transactions
     assert "'amount': '{}'".format(amount_2) in account_2_transactions
 

@@ -29,4 +29,5 @@ class Wallet:
         self.transactions.append(transaction)
     
     def get_transaction_history(self):
+        print(self.transactions[0].return_transaction())
         return "balance: {}, {}".format(self.balance, [xact.return_transaction() for xact in self.transactions])

@@ -93,7 +93,7 @@ class Mixer:
         If is_minted, receiver receives balance from network.
 
         Args:
-            sender (str): Sender's deposit address. Could be (new) if is_minted.
+            sender (str): Sender's deposit address. Could be '(new)' if is_minted.
             receiver (str): Receiver's deposit address.
             amt (float): Amount.
             is_minted (bool): If coins were minted from network.
