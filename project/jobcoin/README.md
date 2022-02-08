@@ -11,13 +11,17 @@
 10. [DONE] Every class into its own file
 11. Update README
 12. [DONE] Support cmd-c, cmd-d breaks for cli
-13. Construct requirements.py
+13. [DONE] Construct requirements.py
 14. Add more CLI tests
 15. [DONE] Amount float vs int
 17. [DONE] Typing for return values of functions
 19. Create architecture diagram of application
 18. Time.sleep can be float?
 16. Address todos in code
+
+NEXT: 
+1. Add more CLI tests
+2. Create architecture diagram of application
 
 ## Learnings
 Absolute imports are good
