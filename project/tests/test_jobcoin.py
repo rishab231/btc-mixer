@@ -54,14 +54,16 @@ def test_insufficient_balance(before_all):
 
 def test_sender_address_no_exists():
     network = JobcoinNetwork()
-    sender_address = "abc"
-    receiver_address = "def"
+    sender_address = "0x90y6"
+    receiver_address = "0xf712"
+
     with pytest.raises(DepositAddressDoesntExistException):
         network.send(sender_address, receiver_address, '200.0')
 
 def test_receiver_address_no_exists(before_all):
     network, sender_address, amount = before_all
     receiver_address = "0xd7fe"
+
     with pytest.raises(DepositAddressDoesntExistException):
         network.send(sender_address, receiver_address, '200.0')
 
@@ -73,6 +75,7 @@ def test_balance(before_all):
     deposit_3 = network.add_addresses(["0x7j4f", "0x20a"])
     amount_3 = "30.0"
     network.send(deposit_1, deposit_3, amount_3)
+
     assert "balance: 18" in network.get_transactions(deposit_1)
     assert "balance: 49" in network.get_transactions(deposit_2)
     assert "balance: 29.4" in network.get_transactions(deposit_3)
