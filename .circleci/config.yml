@@ -16,6 +16,6 @@ jobs:
     steps:
       - run:
           command: |
-            checkout
+            cd ~/project
             pipenv install -r requirements.txt
             pipenv run pytest project/tests/
