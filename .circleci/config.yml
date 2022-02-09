@@ -10,13 +10,12 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     working_directory: ~/btc-mixer/project
     docker:
-      - image: cimg/python:3.10.1
+      - image: cimg/python:3.6.5
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
           command: |
-            pipenv install cython
             pipenv install -r requirements.txt
             pipenv run pytest tests/

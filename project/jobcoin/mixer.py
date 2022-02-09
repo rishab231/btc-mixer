@@ -1,8 +1,8 @@
+import random
 from project.jobcoin.transaction import Transaction
 from project.jobcoin.wallet import Wallet
 import logging
 import time
-import numpy as np
 import time
 from typing import List
 import uuid
@@ -122,9 +122,10 @@ class Mixer:
         Returns:
             List[float]: A list of floats that sum to 1.0, e.g. [0.2, 0.65, 0.15]
         """
-        random_props = np.random.random(n-1)
-        random_props = (random_props/random_props.sum()).round(2)
-        random_props = np.append(random_props, 1.0 - random_props.sum())
+        random_props = [random.random() for _ in range(n-1)]
+        random_sum = sum(random_props)
+        random_props = [round((random_props[i]/random_sum), 2) for i in range(len(random_props))]
+        random_props.append(1.0 - sum(random_props))
         return random_props
     
     def _transfer_discrete(self, receiver: str, amt: float) -> None:
@@ -139,7 +140,7 @@ class Mixer:
         n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
 
         # Todo: Update this to sleep for more time
-        random_sleep_times = np.random.randint(low=0, high=1, size=num_addresses_receiver-1)
+        random_sleep_times = [random.randint(0, 1) for _ in range(num_addresses_receiver-1)]
         self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
