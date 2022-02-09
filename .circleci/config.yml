@@ -17,5 +17,6 @@ jobs:
       - checkout
       - run:
           command: |
+            pipenv install cython
             pipenv install -r requirements.txt
             pipenv run pytest tests/
