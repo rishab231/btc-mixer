@@ -8,7 +8,7 @@ from project.jobcoin.jobcoin_network import JobcoinNetwork
 
 @click.command()
 def main(args=None):
-    print('Welcome to the Jobcoin mixer!\n')
+    click.echo('Welcome to the Jobcoin mixer!\n')
 
     help_string = """
     This Jobcoin Mixer CLI supports the following commands:
@@ -36,7 +36,6 @@ def main(args=None):
             if "add_address" in input_:
                 command, args = input_.split(' ', 1)
                 addresses = args.replace(' ', '').split(",")
-                print(addresses)
                 deposit_address = network.add_addresses(addresses)
                 click.echo(
                 '\nYou may now send Jobcoins to address {deposit_address}. They '
@@ -46,7 +45,6 @@ def main(args=None):
             elif "send" in input_:
                 command, args = input_.split(' ', 1)
                 transaction_metadata = args.split(' ')
-                print(transaction_metadata)
                 if len(transaction_metadata)==2:
                     sender, receiver, amount = JobcoinNetwork.MINTED, transaction_metadata[0], transaction_metadata[1]
                 elif len(transaction_metadata)==3:
