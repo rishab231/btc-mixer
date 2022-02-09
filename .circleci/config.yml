@@ -13,7 +13,6 @@ jobs:
       - image: cimg/python:3.10.1
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-  run-tests:
     steps:
       - checkout
       - run:
@@ -21,12 +20,3 @@ jobs:
             sudo pip install pipenv
             pipenv install -r requirements.txt
             pipenv run pytest project/tests/
-            
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-workflows:
-  run-pytest-workflow:
-    jobs:
-      - build
-      - run-tests
