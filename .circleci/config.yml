@@ -17,6 +17,6 @@ jobs:
       - checkout
       - run:
           command: |
-            sudo pip install pipenv
+            brew install pipenv
             pipenv install -r requirements.txt
             pipenv run pytest project/tests/
