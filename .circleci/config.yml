@@ -17,5 +17,6 @@ jobs:
       - checkout
       - run:
           command: |
+            pwd
             pipenv install -r requirements.txt
             pipenv run pytest project/tests/
