@@ -19,3 +19,14 @@ jobs:
           command: |
             pipenv install -r requirements.txt
             pipenv run pytest
+      - save_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: tr1
