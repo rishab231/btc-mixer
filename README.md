@@ -1,5 +1,7 @@
 # Jobcoin
 
+[![btc-mixer](https://circleci.com/gh/rishab231/btc-mixer.svg?style=shield)](https://app.circleci.com/pipelines/github/rishab231/btc-mixer)
+
 This repo is a small collection of starter templates for the Jobcoin Mixer programming challenge. There are three different versions provided for you to choose: Scala, Python, and NodeJS. It's perfectly okay to use another language you feel more comfortable writing in and simply use these examples as a loose guide.
 
 All the implementations provided are roughly identical in what they provide to you:
