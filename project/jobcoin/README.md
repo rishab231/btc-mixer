@@ -39,9 +39,9 @@ Run using python -m project.cli
 
 ## Improvements
 - Scale out multiple mixers for parallelization
-Different mixers in different geographical regions
+- Different mixers in different geographical regions
 - Partitioning based on deposit_address
-Each with multiple replicas
+- Each with multiple replicas
 
 - Institutional users can cache requests
 NoSQL databases can be used for easier scalability and fewer relationships between datasets

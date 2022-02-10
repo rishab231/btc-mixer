@@ -77,6 +77,19 @@ This class captures a transaction on the JobCoinNetwork, and has attributes `fro
 - Custom exceptions such as InsufficientBalanceException and DepositAddressDoesntExistException prevent duplication of code, and promote human-readable error handling
 
 ## Future extensions:
+1. Add API Layer to serve HTTP requests to/from Jobcoin network
+2. Add listener to network to auto-detect transactions that use network's `deposit_address`
+3. Add coin-minting logic based on network's mining protocol
+4. Composite multiple mixers for the network and partition users and requests based on `hash(deposit_address)`
+5. Each mixer can have associated NoSQL databases with replicas (leader/follow pattern)
+    - **Why NoSQL?**
+    - Cryptocurrency network, by design, has a data-intensive workload
+    - Event-driven architecture more suited for NoSQL DB
+    - Easier scalability across multiple replicas
+    - Wallet and transactions are semi-structured in nature
+    - Frequently used "hot" accounts are easier to cache
+    - Data encapsulation ensures we don't have relationships between data, thus preventing need for expensive joins
+6. Add cache between Mixer and DB to store high-volume and frequent users such as insitutional clients and power individuals such as traders
+7. Instead of suspending thread execution using `time.sleep`, execute discrete transactions asynchronously and return a `Future`
 
 ### Vulnerabilities:
-
