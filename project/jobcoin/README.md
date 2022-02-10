@@ -28,20 +28,21 @@ NEXT:
 6. Address todos in code
 
 ## Learnings
-Absolute imports are good
-Directory structure in python is important
-Generating random floats is not trivial, requires thought
-Futures block for async execution of discrete transactions
-Create JobCoin network that listens in on transactions
-CircleCI
+- Absolute imports are good
+- Directory structure in python is important
+- Generating random floats is not trivial, requires thought
+- Futures block for async execution of discrete transactions, future send should be blocked
+- Listener class that listens in on network transactions
+- CircleCI build
 
 Run using python -m project.cli
 
 ## Improvements
-Scale out multiple mixers for parallelization
+- Scale out multiple mixers for parallelization
 Different mixers in different geographical regions
-Partitioning based on deposit_address
+- Partitioning based on deposit_address
 Each with multiple replicas
 
-Institutional users can cache requests
+- Institutional users can cache requests
 NoSQL databases can be used for easier scalability and fewer relationships between datasets
+- Hash of addresses can also be used as keys for partitioning since we can assume keys are distributed randomly

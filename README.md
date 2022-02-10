@@ -3,8 +3,13 @@
 [![btc-mixer](https://circleci.com/gh/rishab231/btc-mixer.svg?style=shield)](https://app.circleci.com/pipelines/github/rishab231/btc-mixer)
 
 ## Quickstart guide
-**To run tests:**
 ```sh
+git clone https://github.com/rishab231/btc-mixer.git
+cd btc-mixer
+```
+
+**To run tests:**
+```zsh
 pip install pyenv # Install pyenv if not already installed
 pyenv install 3.6.5 # Install Python 3.6.5 for our project
 pyenv virtualenv 3.6.5 rishab # Creates a new virtualenv named 'rishab'
@@ -14,7 +19,7 @@ pipenv run pytest # Run tests
 ```
 
 **To interact with the application via cli:**
-```sh
+```zsh
 # From /btc-mixer run
 python -m cli
 >>>

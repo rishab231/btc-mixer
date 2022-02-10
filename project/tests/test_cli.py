@@ -24,7 +24,7 @@ def test_cli_basic():
     result = runner.invoke(cli.main)
 
     assert result.exit_code == 0
-    assert 'Welcome to the Jobcoin mixer' in result.output
+    assert 'Welcome to the Jobcoin network' in result.output
 
 
 def test_cli_creates_address():
