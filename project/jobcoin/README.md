@@ -15,14 +15,14 @@
 14. [DONE] Add more CLI tests
 15. [DONE] Amount float vs int
 17. [DONE] Typing for return values of functions
-19. Create architecture diagram of application
+19. [DONE] Create architecture diagram of application
 18. Time.sleep can be float?
 16. Address todos in code
 
 NEXT: 
 1. [DONE] Add more CLI tests
 2. [DONE] Integration with CircleCI
-3. Add license file
+3. [DONE] Add license file
 4. [DONE] Create architecture diagram of application
 5. Update README
 6. Address todos in code
