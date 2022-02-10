@@ -21,9 +21,11 @@
 
 NEXT: 
 1. [DONE] Add more CLI tests
-2. Integration with Travis CI
+2. [DONE] Integration with CircleCI
 3. Add license file
-4. Create architecture diagram of application
+4. [DONE] Create architecture diagram of application
+5. Update README
+6. Address todos in code
 
 ## Learnings
 Absolute imports are good
@@ -31,7 +33,15 @@ Directory structure in python is important
 Generating random floats is not trivial, requires thought
 Futures block for async execution of discrete transactions
 Create JobCoin network that listens in on transactions
+CircleCI
 
 Run using python -m project.cli
 
 ## Improvements
+Scale out multiple mixers for parallelization
+Different mixers in different geographical regions
+Partitioning based on deposit_address
+Each with multiple replicas
+
+Institutional users can cache requests
+NoSQL databases can be used for easier scalability and fewer relationships between datasets
