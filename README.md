@@ -91,5 +91,3 @@ This class captures a transaction on the JobCoinNetwork, and has attributes `fro
     - Data encapsulation ensures we don't have relationships between data, thus preventing need for expensive joins
 6. Add cache between Mixer and DB to store high-volume and frequent users such as insitutional clients and power individuals such as traders
 7. Instead of suspending thread execution using `time.sleep`, execute discrete transactions asynchronously and return a `Future`
-
-### Vulnerabilities:
