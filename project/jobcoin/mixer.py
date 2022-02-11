@@ -139,8 +139,8 @@ class Mixer:
         num_addresses_receiver = self.deposit_addresses_to_wallet[receiver].get_num_addresses()
         n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
 
-        # Todo: Update this to sleep for more time
-        random_sleep_times = [random.randint(0, 1) for _ in range(num_addresses_receiver-1)]
+        # Random sleep time between 0 to 2.5 seconds
+        random_sleep_times = [random.uniform(0, 2.5) for _ in range(num_addresses_receiver-1)]
         self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
