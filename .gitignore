@@ -4,4 +4,4 @@ project/__pycache__
 .pytest_cache/
 .DS_Store
 project/.DS_Store
-.vscode/
+.vscode/.DS_Store
