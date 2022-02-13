@@ -21,7 +21,7 @@ pipenv run pytest # Run tests
 **To interact with the application via cli:**
 ```zsh
 # From /btc-mixer run
-python -m cli
+python -m project.cli
 >>>
 Welcome to the Jobcoin network!
 Please enter your command
