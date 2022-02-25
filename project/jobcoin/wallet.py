@@ -1,6 +1,7 @@
 from typing import List
 
 from project.jobcoin.transaction import Transaction
+from decimal import Decimal
 
 class Wallet:
     """
@@ -9,7 +10,7 @@ class Wallet:
     def __init__(self, private_addresses: List[str], deposit_address: str):
         self.private_addresses = private_addresses
         self.deposit_address = deposit_address
-        self.balance = 0.0
+        self.balance = Decimal(0)
         self.transactions = []
 
     def get_num_addresses(self) -> int:
@@ -21,7 +22,7 @@ class Wallet:
         """        
         return len(self.private_addresses)
 
-    def get_balance(self) -> float:
+    def get_balance(self) -> Decimal:
         """
         Get balance of wallet.
 
@@ -30,7 +31,7 @@ class Wallet:
         """        
         return self.balance
     
-    def increase_balance(self, amount: float) -> None:
+    def increase_balance(self, amount: Decimal) -> None:
         """
         Add amount to wallet balance.
 
@@ -38,8 +39,9 @@ class Wallet:
             amount (float): Amount to be deposited in wallet.
         """        
         self.balance += amount
+        print("Balance becomes", self.balance)
 
-    def decrease_balance(self, amount: float):
+    def decrease_balance(self, amount: Decimal):
         """
         Deduct amount from wallet balance.
 
@@ -47,6 +49,7 @@ class Wallet:
             amount (float): Amount to be withdrawn from wallet.
         """        
         self.balance -= amount
+        print("Balance becomes", self.balance)
     
     def add_transaction(self, transaction: Transaction) -> None:
         """

@@ -3,6 +3,7 @@ import pytest
 import re
 from project.jobcoin.jobcoin_network import JobcoinNetwork
 from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
+from decimal import Decimal
 
 @pytest.fixture
 def before_all():
@@ -26,7 +27,7 @@ def test_minting(before_all):
     assert "'fromAddress': '{}'".format(JobcoinNetwork.MINTED) in my_transactions
     assert "'toAddress': '{}'".format(deposit_1) in my_transactions
     assert "'amount': '{}'".format(amount) in my_transactions
-    assert network.get_num_coins_minted() == pytest.approx(float(amount))
+    assert network.get_num_coins_minted() == Decimal(amount)
 
 def test_simple_send(before_all):
     network, deposit_1, amount_1 = before_all
@@ -40,8 +41,11 @@ def test_simple_send(before_all):
     assert "'toAddress': '{}'".format(deposit_2) in account_2_transactions
     assert "'amount': '{}'".format(amount_2) in account_2_transactions
 
-    assert network.mixer.get_balance(deposit_1) == pytest.approx((float(amount_1) * (1 - 0.02) - float(amount_2)))
-    assert network.mixer.get_balance(deposit_2) == pytest.approx((float(amount_2)) * (1-0.02))
+    balance_1: Decimal = Decimal(amount_1) * (Decimal(1) - Decimal("0.02")) - Decimal(amount_2)
+    balance_2: Decimal = Decimal(amount_2) * (Decimal(1) - Decimal("0.02"))
+
+    assert network.mixer.get_balance(deposit_1) == balance_1
+    assert network.mixer.get_balance(deposit_2) == balance_2
 
 def test_insufficient_balance(before_all):
     network, deposit_1, amount_1 = before_all
@@ -79,4 +83,4 @@ def test_balance(before_all):
     assert "balance: 18" in network.get_transactions(deposit_1)
     assert "balance: 49" in network.get_transactions(deposit_2)
     assert "balance: 29.4" in network.get_transactions(deposit_3)
-    assert network.get_fees_collected() == pytest.approx((float(amount) + float(amount_2) + float(amount_3)) * 0.02)
+    assert network.get_fees_collected() == (Decimal(amount) + Decimal(amount_2) + Decimal(amount_3)) * Decimal("0.02")

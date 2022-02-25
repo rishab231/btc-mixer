@@ -3,6 +3,7 @@ from . import config
 from typing import List, Optional
 from project.jobcoin.mixer import Mixer, APIBasedMixer
 from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
+from decimal import Decimal
 
 class JobcoinNetwork:
     """
@@ -17,7 +18,7 @@ class JobcoinNetwork:
 
     def __init__(self):        
         self.mixer = Mixer()
-        self.network_minted_coins = 0.0
+        self.network_minted_coins = Decimal(0)
 
     def add_addresses(self, addresses: List[str]) -> str:
         """
@@ -48,7 +49,7 @@ class JobcoinNetwork:
             raise DepositAddressDoesntExistException(sender)
         if not self.mixer.contains_key(receiver):
             raise DepositAddressDoesntExistException(receiver)
-        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < float(amount):
+        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < Decimal(amount):
             raise InsufficientBalanceException()
         
         if sender == JobcoinNetwork.MINTED:
@@ -78,9 +79,9 @@ class JobcoinNetwork:
         Args:
             amount (str): Number of JobCoins to mint
         """        
-        self.network_minted_coins += float(amount)
+        self.network_minted_coins += Decimal(amount)
 
-    def get_num_coins_minted(self) -> float:
+    def get_num_coins_minted(self) -> Decimal:
         """
         Returns number of coins minted by the JobcoinNetwork.
 
@@ -89,7 +90,7 @@ class JobcoinNetwork:
         """        
         return self.network_minted_coins
 
-    def get_fees_collected(self) -> float:
+    def get_fees_collected(self) -> Decimal:
         """
         Returns amount of fees that the Mixer has collected so far
 

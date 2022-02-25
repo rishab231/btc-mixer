@@ -55,7 +55,7 @@ class JobcoinAPINetwork:
         """        
         return self.mixer.get_transactions(address)
 
-    def get_fees_collected(self) -> float:
+    def get_fees_collected(self) -> Decimal:
         """
         Returns amount of fees that the Mixer has collected so far
 

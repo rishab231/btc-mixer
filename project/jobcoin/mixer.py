@@ -7,26 +7,29 @@ import time
 from typing import List, Optional
 import uuid
 import requests
+from decimal import Decimal
+from project.jobcoin.exceptions import InsufficientBalanceException
 
 class Mixer:
     """
     A class that simulates the JobcoinMixer.
     """
-    def __init__(self, fee_percentage: float = 0.02):
+    def __init__(self, fee_percentage: Decimal = Decimal("0.02")):
         """
         Initialize the mixer with a fee percentage
 
         Args:
-            fee_percentage (float, optional): Percentage fee to charge per transaction. Defaults to 0.02.
+            fee_percentage (Decimal, optional): Percentage fee to charge per transaction. Defaults to 0.02.
         """                
         self.deposit_addresses_to_wallet = dict()
         self._house_address = uuid.uuid4().hex
-        self.fee_percentage = fee_percentage
-        self.house_balance = 0.0
-        self.fees_collected = 0.0
+        self.fee_percentage = Decimal(fee_percentage)
+        print("Fee percentage is", self.fee_percentage)
+        self.house_balance = Decimal(0)
+        self.fees_collected = Decimal(0)
         self.transaction_queue = []
     
-    def get_balance(self, address: str) -> float:
+    def get_balance(self, address: str) -> Decimal:
         """
         Get balance associated with given deposit address.
         If address does not exist in mixer, return 0.
@@ -38,7 +41,7 @@ class Mixer:
             float: Balance in wallet associated with deposit address
         """        
         if address not in self.deposit_addresses_to_wallet:
-            return 0
+            return Decimal(0)
         return self.deposit_addresses_to_wallet[address].get_balance()
     
     def get_deposit_address(self, private_addresses: List[str]) -> str:
@@ -69,10 +72,17 @@ class Mixer:
         """        
         sender_address: str = transaction.get_from_address()
         receiver_address: str = transaction.get_to_address()
-        amount: float = float(transaction.get_amount())
+        amount: Decimal = Decimal(transaction.get_amount())
 
+        print(type(amount))
+        print(type(self.fee_percentage))
+        print("Amount is {}".format(amount))
+        print("Fee percentage is {}".format(self.fee_percentage))
         fee = amount * self.fee_percentage
         amount_after_fee = amount - fee
+        print(type(fee))
+        print(type(amount_after_fee))
+        print("Fee is {}, amount after fee is {}".format(fee, amount_after_fee))
 
         # We also charge the fee for minted transactions
         self._transfer_amount(sender_address, self._house_address, amount, is_minted)
@@ -88,7 +98,7 @@ class Mixer:
         self.fees_collected += fee
         self.house_balance -= fee
 
-    def _transfer_amount(self, sender: str, receiver: str, amt: float, is_minted: bool) -> None:
+    def _transfer_amount(self, sender: str, receiver: str, amt: Decimal, is_minted: bool) -> None:
         """
         Transfers an amount from sender to receiver directly. Sender could be house_address.
         If is_minted, receiver receives balance from network.
@@ -113,7 +123,7 @@ class Mixer:
             receiver_wallet.increase_balance(amt)
 
 
-    def _get_n_random_proportions(self, n) -> List[float]:
+    def _get_n_random_proportions(self, n) -> List[Decimal]:
         """
         List of n random floats that sum exactly to 1.0.
 
@@ -125,11 +135,11 @@ class Mixer:
         """
         random_props = [random.random() for _ in range(n-1)]
         random_sum = sum(random_props)
-        random_props = [round((random_props[i]/random_sum), 2) for i in range(len(random_props))]
-        random_props.append(1.0 - sum(random_props))
+        random_props = [Decimal(round((random_props[i]/random_sum), 2)) for i in range(len(random_props))]
+        random_props.append(Decimal(1.0) - Decimal(sum(random_props)))
         return random_props
     
-    def _transfer_discrete(self, receiver: str, amt: float) -> None:
+    def _transfer_discrete(self, receiver: str, amt: Decimal) -> None:
         """
         Transfers amount from house_address to receiver in random discrete amounts, intervals.
 
@@ -142,11 +152,11 @@ class Mixer:
 
         # Random sleep time between 0 to 2.5 seconds
         random_sleep_times = [random.uniform(0, 2.5) for _ in range(num_addresses_receiver-1)]
-        self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
+        self._transfer_amount(self._house_address, receiver, Decimal(n_random_proportions[0] * amt), is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
             time.sleep(random_sleep_times[i-1])
-            self._transfer_amount(self._house_address, receiver, n_random_proportions[i] * amt, is_minted=False)
+            self._transfer_amount(self._house_address, receiver, Decimal(n_random_proportions[i] * amt), is_minted=False)
 
 
     def contains_key(self, address: str) -> bool:
@@ -181,14 +191,14 @@ class Mixer:
         else:
             return self.deposit_addresses_to_wallet[address].get_transaction_history()
 
-    def get_fees_collected(self) -> float:
+    def get_fees_collected(self) -> Decimal:
         """
         Get all fees collected by JobcoinMixer.
 
         Returns:
             float: Fees collected from all transactions so far.
         """        
-        return self.fees_collected
+        return Decimal(self.fees_collected)
 
 
 class APIBasedMixer:
@@ -197,7 +207,7 @@ class APIBasedMixer:
     """
     A class that simulates the JobcoinMixer.
     """
-    def __init__(self, fee_percentage: float = 0.02):
+    def __init__(self, fee_percentage: Decimal = Decimal(0.02)):
         """
         Initialize the mixer with a fee percentage
 
@@ -206,8 +216,8 @@ class APIBasedMixer:
         """                
         self.deposit_addresses = set()
         self._house_address = "house_" + uuid.uuid4().hex
-        self.fee_percentage = fee_percentage
-        self.fees_collected = 0.0
+        self.fee_percentage = Decimal(fee_percentage)
+        self.fees_collected = Decimal(0)
     
     def get_deposit_address(self, private_addresses: List[str]) -> str:
         """
@@ -227,7 +237,7 @@ class APIBasedMixer:
         self.deposit_addresses.add(new_address)
         return new_address
     
-    def execute_transaction(self, sender: str, receiver: str, amount: str, is_minted) -> Optional[str]:
+    def execute_transaction(self, sender: str, receiver: str, amount: str, is_minted: bool) -> Optional[str]:
         """
         Execute a transaction through the JobcoinMixer.
 
@@ -235,15 +245,13 @@ class APIBasedMixer:
             transaction (Transaction): A valid transaction initiated.
             is_minted (bool, optional): Whether the transaction involvde the coins minted i.e. no sender. Defaults to False.
         """        
-        fee = float(amount) * self.fee_percentage
-        amount_after_fee = float(amount) - fee
-        print("Transaction fee is", fee)
-        print("Amt after fee is", amount_after_fee)
+        fee = Decimal(amount) * self.fee_percentage
+        amount_after_fee = Decimal(amount) - fee
 
         # We also charge the fee for minted transactions
         response = self._transfer_amount(sender, self._house_address, amount, is_minted)
         if response.status_code != requests.codes.ok:
-            return response.text
+            raise InsufficientBalanceException
 
         self._transfer_discrete(receiver, amount_after_fee)
         self.fees_collected += fee
@@ -272,7 +280,7 @@ class APIBasedMixer:
         return r
 
 
-    def _get_n_random_proportions(self, n) -> List[float]:
+    def _get_n_random_proportions(self, n) -> List[Decimal]:
         """
         List of n random floats that sum exactly to 1.0.
 
@@ -282,13 +290,13 @@ class APIBasedMixer:
         Returns:
             List[float]: A list of floats that sum to 1.0, e.g. [0.2, 0.65, 0.15]
         """
-        random_props = [random.random() for _ in range(n-1)]
+        random_props = [Decimal(random.random()) for _ in range(n-1)]
         random_sum = sum(random_props)
-        random_props = [round((random_props[i]/random_sum), 2) for i in range(len(random_props))]
-        random_props.append(1.0 - sum(random_props))
+        random_props = [Decimal(round((random_props[i]/random_sum), 2)) for i in range(len(random_props))]
+        random_props.append(Decimal(1.0) - Decimal(sum(random_props)))
         return random_props
     
-    def _transfer_discrete(self, receiver: str, amt: float) -> None:
+    def _transfer_discrete(self, receiver: str, amt: Decimal) -> None:
         """
         Transfers amount from house_address to receiver in random discrete amounts, intervals.
 
@@ -301,11 +309,11 @@ class APIBasedMixer:
 
         # Random sleep time between 0 to 2.5 seconds
         random_sleep_times = [random.uniform(0, 2.5) for _ in range(num_batches-1)]
-        self._transfer_amount(self._house_address, receiver, str(n_random_proportions[0] * amt), is_minted=False)
+        self._transfer_amount(self._house_address, receiver, str(Decimal(n_random_proportions[0] * amt)), is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
             time.sleep(random_sleep_times[i-1])
-            self._transfer_amount(self._house_address, receiver, str(n_random_proportions[i] * amt), is_minted=False)
+            self._transfer_amount(self._house_address, receiver, str(Decimal(n_random_proportions[i] * amt)), is_minted=False)
 
 
     def get_transactions(self, address: str) -> str:
@@ -326,11 +334,11 @@ class APIBasedMixer:
 
         return r.json()
 
-    def get_fees_collected(self) -> float:
+    def get_fees_collected(self) -> Decimal:
         """
         Get all fees collected by JobcoinMixer.
 
         Returns:
-            float: Fees collected from all transactions so far.
+            Decimal: Fees collected from all transactions so far.
         """        
         return self.fees_collected
