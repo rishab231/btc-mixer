@@ -16,3 +16,5 @@ For a given transaction from sender -> receiver at amount:
 - Create to house_address
 - House address discretely sends coins in batches to the address
 - Num batches can be random from 3-6
+
+We also charge a fee from minted transactions

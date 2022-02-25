@@ -205,7 +205,7 @@ class APIBasedMixer:
             fee_percentage (float, optional): Percentage fee to charge per transaction. Defaults to 0.02.
         """                
         self.deposit_addresses = set()
-        self._house_address = uuid.uuid4().hex
+        self._house_address = "house_" + uuid.uuid4().hex
         self.fee_percentage = fee_percentage
         self.fees_collected = 0.0
     
@@ -235,8 +235,10 @@ class APIBasedMixer:
             transaction (Transaction): A valid transaction initiated.
             is_minted (bool, optional): Whether the transaction involvde the coins minted i.e. no sender. Defaults to False.
         """        
-        fee = amount * self.fee_percentage
-        amount_after_fee = amount - fee
+        fee = float(amount) * self.fee_percentage
+        amount_after_fee = float(amount) - fee
+        print("Transaction fee is", fee)
+        print("Amt after fee is", amount_after_fee)
 
         # We also charge the fee for minted transactions
         response = self._transfer_amount(sender, self._house_address, amount, is_minted)
@@ -246,7 +248,7 @@ class APIBasedMixer:
         self._transfer_discrete(receiver, amount_after_fee)
         self.fees_collected += fee
 
-    def _transfer_amount(self, sender: str, receiver: str, amt: float, is_minted: bool) -> str:
+    def _transfer_amount(self, sender: str, receiver: str, amt: str, is_minted: bool):
         """
         Transfers an amount from sender to receiver directly. Sender could be house_address.
         If is_minted, receiver receives balance from network.
@@ -254,19 +256,20 @@ class APIBasedMixer:
         Args:
             sender (str): Sender's deposit address. Could be '(new)' if is_minted.
             receiver (str): Receiver's deposit address.
-            amt (float): Amount.
+            amt (str): Amount.
             is_minted (bool): If coins were minted from network.
-        """        
+        """
+        print("Transferring {} from {} to {}, is_minted: {}".format(amt, sender, receiver, is_minted))        
         if is_minted:
             # Run /create call to receiver, sender doesn't matter
             payload = {"address": receiver}
             r = requests.post("{}/create".format(APIBasedMixer.API_ENV_URL), data=payload)
-            return r.status_code
         else:
             # Run /post call
             payload = {"fromAddress": sender, "toAddress": receiver, "amount": amt}
             r = requests.post("{}/api/transactions".format(APIBasedMixer.API_ENV_URL), data=payload)
-            return r.status_code
+
+        return r
 
 
     def _get_n_random_proportions(self, n) -> List[float]:
@@ -298,11 +301,11 @@ class APIBasedMixer:
 
         # Random sleep time between 0 to 2.5 seconds
         random_sleep_times = [random.uniform(0, 2.5) for _ in range(num_batches-1)]
-        self._transfer_amount(self._house_address, receiver, n_random_proportions[0] * amt, is_minted=False)
+        self._transfer_amount(self._house_address, receiver, str(n_random_proportions[0] * amt), is_minted=False)
 
         for i in range(1, len(n_random_proportions)):
             time.sleep(random_sleep_times[i-1])
-            self._transfer_amount(self._house_address, receiver, n_random_proportions[i] * amt, is_minted=False)
+            self._transfer_amount(self._house_address, receiver, str(n_random_proportions[i] * amt), is_minted=False)
 
 
     def get_transactions(self, address: str) -> str:
@@ -320,8 +323,8 @@ class APIBasedMixer:
             r = requests.get("{}/api/transactions".format(APIBasedMixer.API_ENV_URL))
         else:
             r = requests.get("{}/api/addresses/{}".format(APIBasedMixer.API_ENV_URL, address))
-            
-        return r.text
+
+        return r.json()
 
     def get_fees_collected(self) -> float:
         """

@@ -100,12 +100,12 @@ class JobcoinNetwork:
 
 class JobcoinAPINetwork:
     """
-    User-facing network class that interacts with the user's input.
+    User-facing network class that interacts with the user's input to call APIBasedMixer.
     """
     MINTED = "(new)"
 
     def __init__(self):        
-        self.mixer = APIBasedMixer()
+        self.mixer = APIBasedMixer(0.0)
 
     def add_addresses(self, addresses: List[str]) -> str:
         """
@@ -127,10 +127,6 @@ class JobcoinAPINetwork:
             sender (str): Sender's deposit address
             receiver (str): Receiver's deposit address
             amount (str): Amount to be sent
-
-        Raises:
-            DepositAddressDoesntExistException: If sender's or receiver's deposit address doesn't exist in Mixer.
-            InsufficientBalanceException: If sender has insufficient balance to cover amount.
         """                    
         is_minted = sender == JobcoinAPINetwork.MINTED
         response = self.mixer.execute_transaction(sender, receiver, amount, is_minted)
