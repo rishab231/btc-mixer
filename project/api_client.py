@@ -54,7 +54,7 @@ def main(args=None):
 
                 network.send(sender, receiver, amount)
                 click.echo(
-                '\n{amount} sent from {sender} to {receiver} via JobcoinMixer.\n'
+                '\n{amount} sent from {sender} to {receiver} via JobcoinMixer API.\n'
                 .format(amount=amount, sender=sender, receiver=receiver))
             
             elif "get_transactions" in input_:

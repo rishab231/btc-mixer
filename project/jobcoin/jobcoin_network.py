@@ -86,7 +86,7 @@ class JobcoinNetwork:
         Returns number of coins minted by the JobcoinNetwork.
 
         Returns:
-            float: Number of JobCoins minted so far
+            Decimal: Number of JobCoins minted so far
         """        
         return self.network_minted_coins
 
@@ -95,7 +95,7 @@ class JobcoinNetwork:
         Returns amount of fees that the Mixer has collected so far
 
         Returns:
-            float: Fees collected so far
+            Decimal: Fees collected so far
         """        
         return self.mixer.get_fees_collected()
 
@@ -106,7 +106,7 @@ class JobcoinAPINetwork:
     MINTED = "(new)"
 
     def __init__(self):        
-        self.mixer = APIBasedMixer(0.0)
+        self.mixer = APIBasedMixer()
 
     def add_addresses(self, addresses: List[str]) -> str:
         """
@@ -146,11 +146,11 @@ class JobcoinAPINetwork:
         """        
         return self.mixer.get_transactions(address)
 
-    def get_fees_collected(self) -> float:
+    def get_fees_collected(self) -> Decimal:
         """
         Returns amount of fees that the Mixer has collected so far
 
         Returns:
-            float: Fees collected so far
+            Decimal: Fees collected so far
         """        
         return self.mixer.get_fees_collected()

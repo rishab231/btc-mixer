@@ -38,7 +38,7 @@ class Mixer:
             address (str): Deposit address associated with wallet
 
         Returns:
-            float: Balance in wallet associated with deposit address
+            Decimal: Balance in wallet associated with deposit address
         """        
         if address not in self.deposit_addresses_to_wallet:
             return Decimal(0)
@@ -74,15 +74,8 @@ class Mixer:
         receiver_address: str = transaction.get_to_address()
         amount: Decimal = Decimal(transaction.get_amount())
 
-        print(type(amount))
-        print(type(self.fee_percentage))
-        print("Amount is {}".format(amount))
-        print("Fee percentage is {}".format(self.fee_percentage))
         fee = amount * self.fee_percentage
         amount_after_fee = amount - fee
-        print(type(fee))
-        print(type(amount_after_fee))
-        print("Fee is {}, amount after fee is {}".format(fee, amount_after_fee))
 
         # We also charge the fee for minted transactions
         self._transfer_amount(sender_address, self._house_address, amount, is_minted)
@@ -106,7 +99,7 @@ class Mixer:
         Args:
             sender (str): Sender's deposit address. Could be '(new)' if is_minted.
             receiver (str): Receiver's deposit address.
-            amt (float): Amount.
+            amt (Decimal): Amount.
             is_minted (bool): If coins were minted from network.
         """        
         if not is_minted:
@@ -125,13 +118,13 @@ class Mixer:
 
     def _get_n_random_proportions(self, n) -> List[Decimal]:
         """
-        List of n random floats that sum exactly to 1.0.
+        List of n random Decimals that sum exactly to 1.0.
 
         Args:
             n ([type]): Length of list to be returned
 
         Returns:
-            List[float]: A list of floats that sum to 1.0, e.g. [0.2, 0.65, 0.15]
+            List[Decimal]: A list of Decimals that sum to 1.0, e.g. [0.2, 0.65, 0.15]
         """
         random_props = [random.random() for _ in range(n-1)]
         random_sum = sum(random_props)
@@ -145,7 +138,7 @@ class Mixer:
 
         Args:
             receiver (str): Receiver's deposit address.
-            amt (float): Amount to be transferred.
+            amt (Decimal): Amount to be transferred.
         """        
         num_addresses_receiver = self.deposit_addresses_to_wallet[receiver].get_num_addresses()
         n_random_proportions = self._get_n_random_proportions(num_addresses_receiver)
@@ -196,7 +189,7 @@ class Mixer:
         Get all fees collected by JobcoinMixer.
 
         Returns:
-            float: Fees collected from all transactions so far.
+            Decimal: Fees collected from all transactions so far.
         """        
         return Decimal(self.fees_collected)
 
@@ -212,7 +205,7 @@ class APIBasedMixer:
         Initialize the mixer with a fee percentage
 
         Args:
-            fee_percentage (float, optional): Percentage fee to charge per transaction. Defaults to 0.02.
+            fee_percentage (Decimal, optional): Percentage fee to charge per transaction. Defaults to 0.02.
         """                
         self.deposit_addresses = set()
         self._house_address = "house_" + uuid.uuid4().hex
@@ -266,8 +259,7 @@ class APIBasedMixer:
             receiver (str): Receiver's deposit address.
             amt (str): Amount.
             is_minted (bool): If coins were minted from network.
-        """
-        print("Transferring {} from {} to {}, is_minted: {}".format(amt, sender, receiver, is_minted))        
+        """   
         if is_minted:
             # Run /create call to receiver, sender doesn't matter
             payload = {"address": receiver}
@@ -282,13 +274,13 @@ class APIBasedMixer:
 
     def _get_n_random_proportions(self, n) -> List[Decimal]:
         """
-        List of n random floats that sum exactly to 1.0.
+        List of n random Decimals that sum exactly to 1.0.
 
         Args:
             n ([type]): Length of list to be returned
 
         Returns:
-            List[float]: A list of floats that sum to 1.0, e.g. [0.2, 0.65, 0.15]
+            List[Decimal]: A list of Decimals that sum to 1.0, e.g. [0.2, 0.65, 0.15]
         """
         random_props = [Decimal(random.random()) for _ in range(n-1)]
         random_sum = sum(random_props)
@@ -302,7 +294,7 @@ class APIBasedMixer:
 
         Args:
             receiver (str): Receiver's deposit address.
-            amt (float): Amount to be transferred.
+            amt (Decimal): Amount to be transferred.
         """        
         num_batches = random.randint(2, 6)
         n_random_proportions = self._get_n_random_proportions(num_batches)

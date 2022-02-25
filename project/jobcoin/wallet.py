@@ -27,7 +27,7 @@ class Wallet:
         Get balance of wallet.
 
         Returns:
-            float: Wallet balance as float.
+            Decimal: Wallet balance as Decimal.
         """        
         return self.balance
     
@@ -36,7 +36,7 @@ class Wallet:
         Add amount to wallet balance.
 
         Args:
-            amount (float): Amount to be deposited in wallet.
+            amount (Decimal): Amount to be deposited in wallet.
         """        
         self.balance += amount
         print("Balance becomes", self.balance)
@@ -46,7 +46,7 @@ class Wallet:
         Deduct amount from wallet balance.
 
         Args:
-            amount (float): Amount to be withdrawn from wallet.
+            amount (Decimal): Amount to be withdrawn from wallet.
         """        
         self.balance -= amount
         print("Balance becomes", self.balance)
