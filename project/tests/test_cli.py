@@ -2,7 +2,6 @@
 import pytest
 import re
 from click.testing import CliRunner
-import requests
 
 from project.jobcoin import config
 from project import cli
