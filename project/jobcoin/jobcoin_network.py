@@ -1,8 +1,9 @@
 from project.jobcoin.transaction import Transaction
 from . import config
-from typing import List
-from project.jobcoin.mixer import Mixer
+from typing import List, Optional
+from project.jobcoin.mixer import Mixer, APIBasedMixer
 from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
+from decimal import Decimal
 
 class JobcoinNetwork:
     """
@@ -17,7 +18,7 @@ class JobcoinNetwork:
 
     def __init__(self):        
         self.mixer = Mixer()
-        self.network_minted_coins = 0.0
+        self.network_minted_coins = Decimal(0)
 
     def add_addresses(self, addresses: List[str]) -> str:
         """
@@ -48,7 +49,7 @@ class JobcoinNetwork:
             raise DepositAddressDoesntExistException(sender)
         if not self.mixer.contains_key(receiver):
             raise DepositAddressDoesntExistException(receiver)
-        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < float(amount):
+        if sender != JobcoinNetwork.MINTED and self.mixer.get_balance(sender) < Decimal(amount):
             raise InsufficientBalanceException()
         
         if sender == JobcoinNetwork.MINTED:
@@ -78,9 +79,9 @@ class JobcoinNetwork:
         Args:
             amount (str): Number of JobCoins to mint
         """        
-        self.network_minted_coins += float(amount)
+        self.network_minted_coins += Decimal(amount)
 
-    def get_num_coins_minted(self) -> float:
+    def get_num_coins_minted(self) -> Decimal:
         """
         Returns number of coins minted by the JobcoinNetwork.
 
@@ -88,6 +89,62 @@ class JobcoinNetwork:
             float: Number of JobCoins minted so far
         """        
         return self.network_minted_coins
+
+    def get_fees_collected(self) -> Decimal:
+        """
+        Returns amount of fees that the Mixer has collected so far
+
+        Returns:
+            float: Fees collected so far
+        """        
+        return self.mixer.get_fees_collected()
+
+class JobcoinAPINetwork:
+    """
+    User-facing network class that interacts with the user's input to call APIBasedMixer.
+    """
+    MINTED = "(new)"
+
+    def __init__(self):        
+        self.mixer = APIBasedMixer(0.0)
+
+    def add_addresses(self, addresses: List[str]) -> str:
+        """
+        Adds a list of addresses to the network and assigns a deposit address.
+
+        Args:
+            addresses (List[str]): A list of user's private addresses
+
+        Returns:
+            str: Unique deposit address allocated by Mixer
+        """        
+        return self.mixer.get_deposit_address(addresses)
+
+    def send(self, sender: str, receiver: str, amount: str) -> Optional[str]:
+        """
+        Send an amount from sender to receiver.
+
+        Args:
+            sender (str): Sender's deposit address
+            receiver (str): Receiver's deposit address
+            amount (str): Amount to be sent
+        """                    
+        is_minted = sender == JobcoinAPINetwork.MINTED
+        response = self.mixer.execute_transaction(sender, receiver, amount, is_minted)
+        return response
+
+    def get_transactions(self, address=None) -> str:
+        """
+        Returns a list of transactions associated with a given deposit address.
+        If address is None, get all transactions in Mixer.
+
+        Args:
+            address ([type], optional): Deposit address associated with a wallet. Defaults to None.
+
+        Returns:
+            str: A balance and list of transactions associated with address as JSON string. If no address, get all transactions from mixer.
+        """        
+        return self.mixer.get_transactions(address)
 
     def get_fees_collected(self) -> float:
         """

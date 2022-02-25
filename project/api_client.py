@@ -3,7 +3,7 @@ import sys
 
 import click
 from project.jobcoin.exceptions import DepositAddressDoesntExistException, InsufficientBalanceException
-from project.jobcoin.jobcoin_network import JobcoinNetwork
+from project.jobcoin.jobcoin_network import JobcoinAPINetwork
 
 
 @click.command()
@@ -11,16 +11,16 @@ def main(args=None):
     click.echo('Welcome to the Jobcoin network!\n')
 
     help_string = """
-    This Jobcoin Network CLI supports the following commands:
+    This Jobcoin Network API supports the following commands:
         a) add_address address1[,address2,...]                  Add addresses to the JobcoinMixer and allocate a new deposit address
-        b) send [sender] [receiver] [amount]                    Send amount from sender to receiver, sender should be empty to mint
+        b) send [sender] [receiver] [amount]                    Send amount from sender to receiver, sender should be empty to mint 50 coins
         c) get_transactions                                     Get all transactions in the JobcoinMixer
         d) get_transactions [address]                           Get all transactions associated with address in the JobcoinMixer
         e) help                                                 See help docstring
         f) blank (enter)                                        Exit from this CLI tool
     """
 
-    network = JobcoinNetwork()
+    network = JobcoinAPINetwork()
 
     while True:
         try:
@@ -46,7 +46,7 @@ def main(args=None):
                 command, args = input_.split(' ', 1)
                 transaction_metadata = args.split(' ')
                 if len(transaction_metadata)==2:
-                    sender, receiver, amount = JobcoinNetwork.MINTED, transaction_metadata[0], transaction_metadata[1]
+                    sender, receiver, amount = JobcoinAPINetwork.MINTED, transaction_metadata[0], "50"
                 elif len(transaction_metadata)==3:
                     sender, receiver, amount = transaction_metadata[0], transaction_metadata[1], transaction_metadata[2]
                 else:
