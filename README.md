@@ -18,6 +18,16 @@ pipenv install -r requirements.txt # Install requirements for project
 pipenv run pytest # Run tests
 ```
 
+**To interact with the application via REST API (http://jobcoin.gemini.com/iodine-defrost):**
+```zsh
+# From /btc-mixer run
+python -m project.api_client
+>>>
+Welcome to the Jobcoin network!
+Please enter your command
+[blank to quit] > help # Type 'help' inside tool to see list of supported commands
+```
+
 **To interact with the application via cli:**
 ```zsh
 # From /btc-mixer run
@@ -42,6 +52,7 @@ A coin mixer is one way to maintain your privacy on a decentralized network. In 
 
 ## Architecture diagram:
 ![Architecture diagram](https://github.com/rishab231/btc-mixer/blob/master/architecture_diagram.png)
+Note: Dotted lines are design extensions yet to be implemented.
 
 ### Implementation details:
 This design uses an object-oriented approach, with natural extensions for scalability, fault-tolerance, and security.
@@ -60,6 +71,8 @@ The mixer handles most of the backend logic of the coin mixing. A mixer has a `h
 
 An invariant of this is that the `house_balance` once pending transactions have cleared represents the fees collected by the mixer. These transactions are stored in a `transaction_queue` for easy access on a `get_transactions` call.
 
+In the **API** implementation that uses the unique RESTful environment, the Mixer does not interact with Wallet or Transaction entities but just uses GET and POST requests to the REST endpoint provided (http://jobcoin.gemini.com/iodine-defrost).
+
 **Wallet:**
 A wallet is owned by a user, and has attributes `private_addresses`, a list of private addresses, a unique `deposit_address`, current account `balance`, and a list `transactions` executed by the wallet. The entity supports `increase_balance`, `decrease_balance`, and returning a human readable summary of the account via `get_transaction_history`.
 
@@ -69,6 +82,7 @@ This class captures a transaction on the JobCoinNetwork, and has attributes `fro
 
 ### Salient features of project:
 - Network uses data and method abstraction to hide implementation details of Mixer
+- Both **API** and **CLI** implementations; API integrated with REST calls to unique environment
 - Transaction and Wallet entities exemplify encapsulation by storing user data in a single place (single source-of-truth), and interacting with the mixer through public methods
 - Type annotations added in code for easier readability and self-documentation
 - Both CLI and Jobcoin classes have been tested extensively with 14 tests (Pytest)
