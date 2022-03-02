@@ -83,6 +83,7 @@ This class captures a transaction on the JobCoinNetwork, and has attributes `fro
 ### Salient features of project:
 - Network uses data and method abstraction to hide implementation details of Mixer
 - Both **API** and **CLI** implementations; API integrated with REST calls to unique environment
+- decimal.Decimal instead of float used for floating point numbers for precise arithmetic and no rounding errors
 - Transaction and Wallet entities exemplify encapsulation by storing user data in a single place (single source-of-truth), and interacting with the mixer through public methods
 - Type annotations added in code for easier readability and self-documentation
 - Both CLI and Jobcoin classes have been tested extensively with 14 tests (Pytest)
